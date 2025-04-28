@@ -1,0 +1,32 @@
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+<script>
+/* global nn */
+
+EMOJI_FEELINGS = ["🥶", "🙁", "😍", "🤩", "🥵"]
+
+async function get_location_temp (lat, lng) {
+  const pointURL = `https://api.weather.gov/points/${lat},${lng}`
+  const nws_point = await fetch(pointURL)
+  const pointData = await nws_point.json()
+  
+  const forecasthrURL = pointData.properties.forecastHourly
+  const nws_forecast = await fetch(forecasthrURL)
+  
+  const forecast = await nws_forecast.json()
+  
+  const temp = forecast.properties.periods[0].temperature
+  const unit = forecast.properties.periods[0].temperatureUnit
+  
+  console.log(`The current temperature is ${temp}${unit}`)
+  console.log(forecast.properties.periods.length)
+}
+
+async function get_temperature () {
+  const my_gps = await nn.askForGPS()
+  await get_location_temp(my_gps.lat, my_gps.lng)
+}
+
+get_temperature()
+
+
+</script>
