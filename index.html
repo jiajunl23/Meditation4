@@ -69,38 +69,76 @@ async function draw_temp_emojis (periods) {
 }
 
 async function add_date_text_and_color (periods) {
-  let length_monitor = 0
   let already_occupied_len = 0
   let endtime = 0
+  let is_day = 0
+  let day_or_night_len = 0
   for (let i = 0; i < periods.length; i++) {
     let previous_endtime = endtime
     endtime = periods[i].endTime.split("T")
     endtime = endtime[0]
+    
+    let previous_is_day = is_day
+    is_day = periods[i].isDaytime
+    
+    if (previous_is_day !== 0 && is_day !== previous_is_day) {
+      console.log(previous_is_day)
+      
+      let previous_day_or_night_len = day_or_night_len
+      day_or_night_len = (i / periods.length) * nn.height
+      let color = "white"
+      if (previous_is_day) {
+        color = "#87CEEB"
+      } else {
+        color = "#0C2340"
+      }
+      const box = nn.create("div")
+                   .css({
+                     width: nn.width,
+                     height: day_or_night_len - previous_day_or_night_len,
+                     backgroundColor: color,
+                     position: "absolute",
+                     top: previous_day_or_night_len,
+                     left: 0
+                   })
+                   .addTo("body")
+    }
+    
     if (previous_endtime !== 0 && endtime !== previous_endtime) {
       console.log(endtime)
-      length_monitor = length_monitor / 2
       let previous_occupied_len = already_occupied_len
       already_occupied_len = (i / periods.length) * nn.height
       const box = nn.create("div")
                    .css({
                      width: nn.width,
                      height: already_occupied_len - previous_occupied_len,
-                     backgroundColor: nn.randomColor(),
+                     backgroundColor: "transparent",
                      position: "absolute",
                      top: previous_occupied_len,
                      left: 0,
-                     border: "1px solid white"
+                     border: "1px solid white",
                    })
                    .addTo("body")
-      nn.create("span")
+      nn.create("h2")
         .content(endtime)
         .css({
-             fontSize: "15px",
-             position: "absolute",
-             top: previous_occupied_len,
-             left: nn.width / 2 - 50,
-           })
-        .addTo("body")
+            fontSize: "15px",
+            position: "relative",
+            textAlign: "center",
+            color: "white",
+            opacity: 0.7
+        })
+        .addTo(box)
+      // nn.create("span")
+      //   .content(endtime)
+      //   .css({
+      //        fontSize: "15px",
+      //        position: "absolute",
+      //        top: previous_occupied_len,
+      //        left: nn.width / 2 - 50,
+      //        color: "white"
+      //      })
+      //   .addTo("body")
     }
     // await sleep(1000)
   }
