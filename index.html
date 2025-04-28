@@ -18,12 +18,6 @@ async function get_location_forecast (lat, lng) {
   
   const forecast = await nws_forecast.json()
   console.log(forecasthrURL)
-  
-  // const temp = forecast.properties.periods[0].temperature
-  // const unit = forecast.properties.periods[0].temperatureUnit
-  
-  // console.log(`The current temperature is ${temp}${unit}`)
-  // console.log(forecast.properties.periods.length)
   return forecast
 }
   
@@ -53,7 +47,7 @@ function determine_mood (temperature) {
 
 async function draw_temp_emojis (periods) {
   for (let i = 0; i < periods.length; i++) {
-    for (let j = 0; j < 10; j++) {
+    for (let j = 0; j < 20; j++) {
       nn.create("span")
         .content(determine_mood(periods[i].temperature))
         .css({
@@ -64,7 +58,7 @@ async function draw_temp_emojis (periods) {
           })
         .addTo("body")
     }
-    await sleep(500)
+    await sleep(100)
   }
 }
 
@@ -116,7 +110,7 @@ async function add_date_text_and_color (periods) {
                      position: "absolute",
                      top: previous_occupied_len,
                      left: 0,
-                     border: "1px solid white",
+                     border: "1px dashed white",
                    })
                    .addTo("body")
       nn.create("h2")
@@ -129,18 +123,7 @@ async function add_date_text_and_color (periods) {
             opacity: 0.7
         })
         .addTo(box)
-      // nn.create("span")
-      //   .content(endtime)
-      //   .css({
-      //        fontSize: "15px",
-      //        position: "absolute",
-      //        top: previous_occupied_len,
-      //        left: nn.width / 2 - 50,
-      //        color: "white"
-      //      })
-      //   .addTo("body")
     }
-    // await sleep(1000)
   }
 }
 
@@ -159,8 +142,8 @@ async function main () {
   const forecast = await get_location_forecast(my_gps.lat, my_gps.lng)
   notice.remove()
   const periods = forecast.properties.periods
+  await add_date_text_and_color(periods)
   draw_temp_emojis(periods)
-  add_date_text_and_color(periods)
 }
 
 nn.on("load", main)
