@@ -54,7 +54,7 @@ async function draw_temp_emojis (periods) {
               fontSize: "15px",
               position: "absolute",
               left: nn.random(0, nn.width),
-              top: nn.random(i / periods.length, (i + 1) / periods.length) * nn.height
+              top: Math.min(nn.height - 15, nn.random(i / periods.length, (i + 1) / periods.length) * nn.height)
           })
         .addTo("body")
     }
