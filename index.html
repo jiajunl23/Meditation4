@@ -60,7 +60,7 @@ async function draw_temp_emojis (periods) {
               fontSize: "15px",
               position: "absolute",
               left: nn.random(0, nn.width),
-              top: nn.random((i / periods.length) * nn.height, (i + 1) / periods.length * nn.height)
+              top: nn.random(i / periods.length, (i + 1) / periods.length) * nn.height
           })
         .addTo("body")
     }
@@ -81,15 +81,6 @@ async function add_date_text_and_color (periods) {
       length_monitor = length_monitor / 2
       let previous_occupied_len = already_occupied_len
       already_occupied_len = (i / periods.length) * nn.height
-      nn.create("p")
-        .content(endtime)
-        .css({
-             fontSize: "15px",
-             position: "absolute",
-             top: previous_occupied_len,
-             left: 0,
-           })
-        .addTo("body")
       const box = nn.create("div")
                    .css({
                      width: nn.width,
@@ -101,6 +92,15 @@ async function add_date_text_and_color (periods) {
                      border: "1px solid white"
                    })
                    .addTo("body")
+      nn.create("span")
+        .content(endtime)
+        .css({
+             fontSize: "15px",
+             position: "absolute",
+             top: previous_occupied_len,
+             left: nn.width / 2 - 50,
+           })
+        .addTo("body")
     }
     // await sleep(1000)
   }
