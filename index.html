@@ -64,20 +64,68 @@ async function draw_temp_emojis (periods) {
           })
         .addTo("body")
     }
-    console.log(periods[i].temperature)
+    await sleep(1000)
+  }
+}
+
+async function add_date_text_and_color (periods) {
+  let length_monitor = 0
+  let already_occupied_len = 0
+  let endtime = 0
+  for (let i = 0; i < periods.length; i++) {
+    let previous_endtime = endtime
+    endtime = periods[i].endTime.split("T")
+    endtime = endtime[0]
+    if (previous_endtime !== 0 && endtime !== previous_endtime) {
+      console.log(endtime)
+      length_monitor = length_monitor / 2
+      let previous_occupied_len = already_occupied_len
+      already_occupied_len = (i / periods.length) * nn.height
+      nn.create("p")
+        .content(endtime)
+        .css({
+             fontSize: "15px",
+             position: "absolute",
+             top: previous_occupied_len,
+             left: 0,
+           })
+        .addTo("body")
+      const box = nn.create("div")
+                   .css({
+                     width: nn.width,
+                     height: already_occupied_len - previous_occupied_len,
+                     backgroundColor: nn.randomColor(),
+                     position: "absolute",
+                     top: previous_occupied_len,
+                     left: 0,
+                     border: "1px solid white"
+                   })
+                   .addTo("body")
+    }
+    // await sleep(1000)
   }
 }
 
 
-
 async function main () {
+  const notice = nn.create("span")
+                  .content("Loading Weather Info Now ...")
+                  .css({
+                        fontSize: "15px",
+                        position: "absolute",
+                        left: 0,
+                        top: 0
+                    })
+                  .addTo("body")
   const my_gps = await nn.askForGPS()
   const forecast = await get_location_forecast(my_gps.lat, my_gps.lng)
+  notice.remove()
   const periods = forecast.properties.periods
   draw_temp_emojis(periods)
+  add_date_text_and_color(periods)
 }
 
-main()
+nn.on("load", main)
 
 
 </script>
