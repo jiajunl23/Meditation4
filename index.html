@@ -17,7 +17,7 @@ async function get_location_forecast (lat, lng) {
   const nws_forecast = await fetch(forecasthrURL)
   
   const forecast = await nws_forecast.json()
-  console.log(forecasthrURL)
+  // console.log(forecasthrURL)
   return forecast
 }
   
@@ -76,7 +76,7 @@ async function add_date_text_and_color (periods) {
     is_day = periods[i].isDaytime
     
     if ((previous_is_day !== 0 && is_day !== previous_is_day) || i === periods.length - 1) {
-      console.log(previous_is_day)
+      // console.log(previous_is_day)
       
       let previous_day_or_night_len = day_or_night_len
       day_or_night_len = (i / periods.length) * nn.height
@@ -99,7 +99,7 @@ async function add_date_text_and_color (periods) {
     }
     
     if (previous_endtime !== 0 && endtime !== previous_endtime) {
-      console.log(previous_endtime)
+      // console.log(previous_endtime)
       let previous_occupied_len = already_occupied_len
       already_occupied_len = (i / periods.length) * nn.height
       const box = nn.create("div")
