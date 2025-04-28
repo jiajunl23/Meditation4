@@ -99,7 +99,7 @@ async function add_date_text_and_color (periods) {
     }
     
     if (previous_endtime !== 0 && endtime !== previous_endtime) {
-      console.log(endtime)
+      console.log(previous_endtime)
       let previous_occupied_len = already_occupied_len
       already_occupied_len = (i / periods.length) * nn.height
       const box = nn.create("div")
@@ -111,17 +111,19 @@ async function add_date_text_and_color (periods) {
                      top: previous_occupied_len,
                      left: 0,
                      border: "1px dashed white",
+                     display: "flex",
+                     justifyContent: "center",
+                     alignItems: "center"
                    })
                    .addTo("body")
       nn.create("h2")
-        .content(endtime)
+        .content(previous_endtime)
         .css({
             fontFamily: "Brush Script MT, cursive",
             fontSize: "15px",
-            position: "relative",
-            textAlign: "center",
             color: "white",
-            opacity: 0.7
+            opacity: 0.7,
+            zIndex: 1001
         })
         .addTo(box)
     }
