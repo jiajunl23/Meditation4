@@ -64,7 +64,7 @@ async function draw_temp_emojis (periods) {
           })
         .addTo("body")
     }
-    await sleep(1000)
+    await sleep(500)
   }
 }
 
@@ -81,7 +81,7 @@ async function add_date_text_and_color (periods) {
     let previous_is_day = is_day
     is_day = periods[i].isDaytime
     
-    if (previous_is_day !== 0 && is_day !== previous_is_day) {
+    if ((previous_is_day !== 0 && is_day !== previous_is_day) || i === periods.length - 1) {
       console.log(previous_is_day)
       
       let previous_day_or_night_len = day_or_night_len
@@ -92,16 +92,16 @@ async function add_date_text_and_color (periods) {
       } else {
         color = "#0C2340"
       }
-      const box = nn.create("div")
-                   .css({
-                     width: nn.width,
-                     height: day_or_night_len - previous_day_or_night_len,
-                     backgroundColor: color,
-                     position: "absolute",
-                     top: previous_day_or_night_len,
-                     left: 0
-                   })
-                   .addTo("body")
+      nn.create("div")
+        .css({
+             width: nn.width,
+             height: day_or_night_len - previous_day_or_night_len,
+             backgroundColor: color,
+             position: "absolute",
+             top: previous_day_or_night_len,
+             left: 0
+       })
+       .addTo("body")
     }
     
     if (previous_endtime !== 0 && endtime !== previous_endtime) {
