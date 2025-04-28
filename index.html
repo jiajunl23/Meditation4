@@ -50,26 +50,30 @@ function determine_mood (temperature) {
   }
 }
 
-async function draw_temp_emojis () {
-  
+async function draw_temp_emojis (periods) {
+  for (let i = 0; i < periods.length; i++) {
+    for (let j = 0; j < 10; j++) {
+      nn.create("span")
+        .content(determine_mood(periods[i].temperature))
+        .css({
+              fontSize: "15px",
+              position: "absolute",
+              left: nn.random(0, nn.width),
+              top: nn.random((i / periods.length) * nn.height, (i + 1) / periods.length * nn.height)
+          })
+        .addTo("body")
+    }
+  }
 }
 
 async function main () {
   const my_gps = await nn.askForGPS()
   const forecast = await get_location_forecast(my_gps.lat, my_gps.lng)
   const periods = forecast.properties.periods
-  
-  nn.create("span")
-    .content(EMOJI_FEELINGS[0])
-    .css({
-          fontSize: "15px",
-          position: "absolute",
-          left: 100,
-          top: 100
-      })
-    .addTo("body")
+  draw_temp_emojis(periods)
 }
-get_temperature()
+
+main()
 
 
 </script>
