@@ -17,6 +17,7 @@ async function get_location_forecast (lat, lng) {
   const nws_forecast = await fetch(forecasthrURL)
   
   const forecast = await nws_forecast.json()
+  console.log(forecasthrURL)
   
   // const temp = forecast.properties.periods[0].temperature
   // const unit = forecast.properties.periods[0].temperatureUnit
@@ -30,19 +31,19 @@ function determine_mood (temperature) {
   if (temperature <= 32 + 1.8 * 5) {
     return EMOJI_FEELINGS[0]
   }
-  if (32 + 1.8 * 5 < temperature <= 32 + 1.8 * 10) {
+  if (32 + 1.8 * 5 < temperature && temperature <= 32 + 1.8 * 10) {
     return EMOJI_FEELINGS[1]
   }
-  if (32 + 1.8 * 10 < temperature <= 32 + 1.8 * 15) {
+  if (32 + 1.8 * 10 < temperature && temperature <= 32 + 1.8 * 15) {
     return EMOJI_FEELINGS[2]
   }
-  if (32 + 1.8 * 15 < temperature <= 32 + 1.8 * 20) {
+  if (32 + 1.8 * 15 < temperature && temperature <= 32 + 1.8 * 20) {
     return EMOJI_FEELINGS[3]
   }
-  if (32 + 1.8 * 20 < temperature <= 32 + 1.8 * 25) {
+  if (32 + 1.8 * 20 < temperature && temperature <= 32 + 1.8 * 25) {
     return EMOJI_FEELINGS[4]
   }
-  if (32 + 1.8 * 25 < temperature <= 32 + 1.8 * 30) {
+  if (32 + 1.8 * 25 < temperature && temperature <= 32 + 1.8 * 30) {
     return EMOJI_FEELINGS[5]
   }
   if (32 + 1.8 * 30 < temperature) {
@@ -63,8 +64,11 @@ async function draw_temp_emojis (periods) {
           })
         .addTo("body")
     }
+    console.log(periods[i].temperature)
   }
 }
+
+
 
 async function main () {
   const my_gps = await nn.askForGPS()
