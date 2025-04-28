@@ -2,9 +2,13 @@
 <script>
 /* global nn */
 
-EMOJI_FEELINGS = ["🥶", "🙁", "😍", "🤩", "🥵"]
+const EMOJI_FEELINGS = ["🥶", "🤧", "🫤", "☺️", "😍", "🤩", "🥵"]
 
-async function get_location_temp (lat, lng) {
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function get_location_forecast (lat, lng) {
   const pointURL = `https://api.weather.gov/points/${lat},${lng}`
   const nws_point = await fetch(pointURL)
   const pointData = await nws_point.json()
@@ -14,18 +18,57 @@ async function get_location_temp (lat, lng) {
   
   const forecast = await nws_forecast.json()
   
-  const temp = forecast.properties.periods[0].temperature
-  const unit = forecast.properties.periods[0].temperatureUnit
+  // const temp = forecast.properties.periods[0].temperature
+  // const unit = forecast.properties.periods[0].temperatureUnit
   
-  console.log(`The current temperature is ${temp}${unit}`)
-  console.log(forecast.properties.periods.length)
+  // console.log(`The current temperature is ${temp}${unit}`)
+  // console.log(forecast.properties.periods.length)
+  return forecast
+}
+  
+function determine_mood (temperature) {
+  if (temperature <= 32 + 1.8 * 5) {
+    return EMOJI_FEELINGS[0]
+  }
+  if (32 + 1.8 * 5 < temperature <= 32 + 1.8 * 10) {
+    return EMOJI_FEELINGS[1]
+  }
+  if (32 + 1.8 * 10 < temperature <= 32 + 1.8 * 15) {
+    return EMOJI_FEELINGS[2]
+  }
+  if (32 + 1.8 * 15 < temperature <= 32 + 1.8 * 20) {
+    return EMOJI_FEELINGS[3]
+  }
+  if (32 + 1.8 * 20 < temperature <= 32 + 1.8 * 25) {
+    return EMOJI_FEELINGS[4]
+  }
+  if (32 + 1.8 * 25 < temperature <= 32 + 1.8 * 30) {
+    return EMOJI_FEELINGS[5]
+  }
+  if (32 + 1.8 * 30 < temperature) {
+    return EMOJI_FEELINGS[6]
+  }
 }
 
-async function get_temperature () {
+async function draw_temp_emojis () {
+  
+}
+
+async function main () {
   const my_gps = await nn.askForGPS()
-  await get_location_temp(my_gps.lat, my_gps.lng)
+  const forecast = await get_location_forecast(my_gps.lat, my_gps.lng)
+  const periods = forecast.properties.periods
+  
+  nn.create("span")
+    .content(EMOJI_FEELINGS[0])
+    .css({
+          fontSize: "15px",
+          position: "absolute",
+          left: 100,
+          top: 100
+      })
+    .addTo("body")
 }
-
 get_temperature()
 
 
